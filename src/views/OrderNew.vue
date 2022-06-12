@@ -49,15 +49,14 @@
               </v-text-field>
             </div>
             <div class="form-group">
-              <v-text-field
+              <a-date-picker
                 v-bind:label="$t('orders.orderDate')"
                 class="pa-1 ma-1"
                 color="white darken-2"
                 outlined
                 variant="outlined"
                 @change="this.orderDateChanged($event)"
-                v-model="form.orderDate">
-              </v-text-field>
+                v-model="form.orderDate" />
             </div>
             <div class="form-group">
               <h5>{{ $t('orders.customersTitle') }}</h5>
@@ -65,8 +64,8 @@
               <CustomerForm
                 v-for="item in this.form.customers"
                 :id="item.id"
-                @clearclicked="clearCustomerFormClicked"
-              />
+                @clearclicked="clearCustomerFormClicked">
+              </CustomerForm>
               <div class="pa-5 ma-5">
                 <v-btn
                   color="white darken-2"
@@ -103,6 +102,7 @@
     components: { CustomerForm },
     data() {
       return {
+        picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         breadcrumbs: [],
         form: {
           customers: [],
@@ -213,9 +213,10 @@
         });
       },
       orderDateChanged(event) {
-        this.setStoreData({
-          'orderDate': event.target.value,
-        });
+        console.log(event);
+        // this.setStoreData({
+        //   'orderDate': event.target.value,
+        // });
       },
       handleClickSubmit() {
         console.log('handleClickSubmit');

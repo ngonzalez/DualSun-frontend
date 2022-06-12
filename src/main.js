@@ -39,6 +39,10 @@ import '@mdi/font/css/materialdesignicons.css'; // Ensure you are using css-load
 import 'vue-toast-notification/dist/theme-sugar.css';
 import './assets/base.css';
 
+// Antd
+import { DatePicker } from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css'; // or 'ant-design-vue/dist/antd.less'
+
 // http
 import { HttpLink } from "apollo-link-http";
 import fetch from 'cross-fetch'
@@ -109,6 +113,7 @@ app.use(Vuetify);
 app.use(Store);
 app.use(VueCookies);
 app.use(VueToast);
+app.use(DatePicker);
 app.mixin(StoreDataConfiguration);
 
 document.addEventListener('DOMContentLoaded', () => {
