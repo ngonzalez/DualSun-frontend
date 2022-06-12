@@ -60,13 +60,29 @@
               <CustomerForm
                 v-for="item in this.form.customers"
                 :id="item.id"
-                @clearclicked="clearCustomerFormClicked">
+                @customerFormClear="clearCustomerFormClicked">
               </CustomerForm>
               <div class="pa-5 ma-5">
                 <v-btn
                   color="white darken-2"
                   @click.prevent="addCustomer">
                   {{ $t('orders.actions.addCustomer') }}
+                </v-btn>
+              </div>
+            </div>
+            <div class="form-group">
+              <h5>{{ $t('orders.panelsTitle') }}</h5>
+              <hr />
+              <PanelForm
+                v-for="item in this.form.panels"
+                :id="item.id"
+                @panelFormClear="clearPanelFormClicked">
+              </PanelForm>
+              <div class="pa-5 ma-5">
+                <v-btn
+                  color="white darken-2"
+                  @click.prevent="addPanel">
+                  {{ $t('orders.actions.addPanel') }}
                 </v-btn>
               </div>
             </div>
@@ -90,13 +106,17 @@
 <script>
   import { mapMutations } from 'vuex';
   import CustomerForm from '../components/CustomerForm.vue';
+  import PanelForm from '../components/PanelForm.vue';
   import createOrder from '../mutations/createOrder';
   import dayjs from 'dayjs';
   import _ from 'lodash';
 
   export default {
     name: 'OrderNew',
-    components: { CustomerForm },
+    components: {
+      CustomerForm,
+      PanelForm,
+    },
     data() {
       return {
         picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
@@ -108,7 +128,9 @@
       };
     },
     created() {
-      this.addCustomer();
+      console.log(this.storeData);
+      if (!this.hasCustomers()) this.addCustomer();
+      if (!this.hasPanels()) this.addPanel();
     },
     watch: {
       '$route.name': {
@@ -142,6 +164,24 @@
     },
     methods: {
       ...mapMutations(['setStoreData']),
+      // customers
+      customers() {
+        if (!this.storeData.customers) return;
+        return this.storeData.customers;
+      },
+      hasCustomers() {
+        return this.storeData.customers &&
+               this.storeData.customers.length > 0
+      },
+      // panels
+      panels() {
+        if (!this.storeData.panels) return;
+        return this.storeData.panels;
+      },
+      hasPanels() {
+        return this.storeData.panels &&
+               this.storeData.panels.length > 0
+      },
       loadBreadCrumbs() {
         this.breadcrumbs = [];
         this.breadcrumbs.push({
@@ -155,10 +195,22 @@
       addCustomer() {
         this.form.customers.push({
           id: _.uniqueId('customer-')
-        })
+        });
       },
       clearCustomerFormClicked(event) {
-        _.remove(this.form.customers, function(item) { if (item.id == event.id) { return item } })
+        _.remove(this.form.customers, function(item) {
+          if (item.id == event.id) { return item }
+        })
+      },
+      addPanel() {
+        this.form.panels.push({
+          id: _.uniqueId('panel-')
+        });
+      },
+      clearPanelFormClicked(event) {
+        _.remove(this.form.panels, function(item) {
+          if (item.id == event.id) { return item }
+        })
       },
       clearFormValues() {
         this.setStoreData({ 'companyName': null });

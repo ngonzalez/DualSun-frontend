@@ -11,20 +11,23 @@
       "orderAddress": "Order Address",
       "orderDate": "Order Date",
       "customersTitle": "Customers",
+      "panelsTitle": "Panels",
       "customers": {
         "name": "Name",
         "email": "Email",
         "phone": "Telephone"
       },
       "panels": {
-        "type": "Type",
-        "ID": "ID"
+        "panelType": "Panel Type",
+        "panelId": "Panel Id"
       },
       "actions": {
         "submit": "Create Order",
         "addCustomer": "Add Customer",
         "removeCustomer": "Remove Customer",
-        "selectTime": "Select Time"
+        "selectTime": "Select Time",
+        "addPanel": "Add Panel",
+        "removePanel": "Remove Panel"
       },
       "success": {
         "create": "Order created successfully"

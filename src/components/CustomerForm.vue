@@ -71,11 +71,11 @@
     props: {
       id: String,
     },
-    emits: ['clearclicked'],
+    emits: ['customerFormClear'],
     methods: {
       ...mapMutations(['setStoreData']),
       removeCustomer(event) {
-        this.$emit('clearclicked', { id: this.id });
+        this.$emit('customerFormClear', { id: this.id });
       },
       nameChanged(event) {
         console.log('nameChanged')
