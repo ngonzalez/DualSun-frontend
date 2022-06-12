@@ -4,6 +4,7 @@
       "home": "Home"
     },
     "orders": {
+      "orderTitle": "Order",
       "ordersTitle": "Orders",
       "newOrderTitle": "New Order",
       "companyName": "Company Name",
@@ -43,7 +44,8 @@
         "create": "Order created successfully"
       },
       "error": {
-        "create": "Failed to create order"
+        "create": "Failed to create order",
+        "show": "Failed to find order"
       }
     }
   }

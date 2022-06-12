@@ -10,6 +10,21 @@
           </v-breadcrumbs>
         </v-col>
       </v-row>
+      <v-row v-if="hasErrors">
+        <v-col cols="3"></v-col>
+        <v-col cols="6">
+          <ul v-for="error in this.errors">
+            <li>
+              <v-alert
+                type="error"
+              >
+                {{ error }}
+              </v-alert>
+            </li>
+          </ul>
+        </v-col>
+        <v-col cols="3"></v-col>
+      </v-row>
       <v-row>
         <v-col cols="3"></v-col>
         <v-col cols="6">
@@ -53,7 +68,9 @@
                 show-time
                 placeholder="Select time"
                 @change="this.orderDateChanged($event)" />
-              <h5 class="subtitle ma-5 pa-5">{{ this.getOrderDate() }}</h5>
+              <h5 class="subtitle ma-5 pa-5">
+                {{ this.getOrderDateFormatted() }}
+              </h5>
             </div>
             <div class="form-group">
               <h5>{{ $t('orders.customersTitle') }}</h5>
@@ -124,6 +141,7 @@
     data() {
       return {
         breadcrumbs: [],
+        errors: null,
         form: {
           customers: [],
           panels: [],
@@ -148,7 +166,6 @@
       '$route.name': {
         handler: function(route_name) {
           switch (route_name) {
-
             // /orders/new
             case 'order_new': {
               this.setFormValues();
@@ -160,12 +177,6 @@
             case 'order_new_redirect': {
               this.clearFormValues();
               this.loadBreadCrumbs();
-              break;
-            }
-
-            // /orders
-            case 'orders': {
-              // create order
               break;
             }
           }
@@ -186,12 +197,9 @@
           },
         });
       },
-      getOrderDate() {
-        if (this.storeData.orderDate) {
-          return dayjs(this.storeData.orderDate).format('dddd, MMMM D, YYYY h:mm A');
-        } else {
-          return dayjs(new Date()).format('dddd, MMMM D, YYYY 12:00 A');
-        }
+      hasErrors() {
+        return this.errors &&
+               this.errors.length > 0
       },
       // customers
       customers() {
@@ -241,6 +249,7 @@
       updatePanelFormClicked(event) {
         this.setStoreData({ 'panels': this.form.panels });
       },
+      // form
       clearFormValues() {
         this.setStoreData({ 'companyName': null });
         this.form.companyName = null;
@@ -250,6 +259,10 @@
         this.form.orderAddress = null;
         this.setStoreData({ 'orderDate': null });
         this.form.orderDate = null;
+        this.setStoreData({ 'customers': null });
+        this.form.customers = null;
+        this.setStoreData({ 'panels': null });
+        this.form.panels = null;
       },
       setFormValues() {
         if (this.storeData.companyName) {
@@ -292,17 +305,47 @@
         });
       },
       handleClickSubmit() {
-        console.log('handleClickSubmit');
-        console.log(this.form);
+        this.createOrder();
+      },
+      getOrderDateFormatted() {
+        if (this.storeData.orderDate) {
+          return dayjs(this.storeData.orderDate).format('dddd, MMMM D, YYYY h:mm A');
+        } else {
+          return dayjs(new Date()).format('dddd, MMMM D, YYYY 12:00 A');
+        }
+      },
+      getOrderDateIso() {
+        if (this.storeData.orderDate) {
+          return dayjs(this.storeData.orderDate).toISOString();
+        } else {
+          return dayjs(new Date()).toISOString();
+        }
+      },
+      getCustomers() {
+        return _.map(this.storeData.customers, function(item) {
+          return {
+            name: item.name,
+            email: item.email,
+            phone: item.phone,
+          }
+        });
+      },
+      getPanels() {
+        return _.map(this.storeData.panels, function(item) {
+          return {
+            panelId: item.panelId,
+            panelType: item.panelType,
+          }
+        });
       },
       createOrder() {
         const payload = {
           companyName:  this.form.companyName,
           companySiren: this.form.companySiren,
           orderAddress: this.form.orderAddress,
-          orderDate: this.form.orderDate,
-          // customers: JSON.stringify(this.getCustomers()),
-          // panels: JSON.stringify(this.getPanels()),
+          orderDate: this.getOrderDateIso(),
+          customers: JSON.stringify(this.getCustomers()),
+          panels: JSON.stringify(this.getPanels()),
         };
         createOrder(_.assign({ apollo: this.$apollo }, payload))
           .then((response) => _.get(response, 'data.createOrder', {}))
@@ -312,14 +355,16 @@
                 'createOrderBackend': response,
               });
               this.$toast.info(this.$t('orders.success.create'));
+              console.log(this.storeData.createOrderBackend);
               this.$router.push({
                 name: 'order_show',
                 params: {
-                  id: this.storeData.createOrderBackend.order.id,
+                  id: this.storeData.createOrderBackend.order.itemId,
                 }
               });
             } else {
               this.$toast.warning(this.$t('orders.error.create'));
+              this.errors = JSON.parse(response.errors);
             }
           });
       },

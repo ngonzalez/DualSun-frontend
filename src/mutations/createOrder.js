@@ -4,21 +4,21 @@ const mutation = gql`
   mutation createOrder(
     $companyName: String!,
     $companySiren: String!,
-    $customers: JSON!,
     $orderAddress: String!,
-    $orderDate: String!
+    $orderDate: String!,
+    $customers: JSON!,
     $panels: JSON!
   ) {
     createOrder(input: {
       companyName: $companyName,
       companySiren: $companySiren,
-      customers: $customers,
       orderAddress: $orderAddress,
       orderDate: $orderDate,
+      customers: $customers,
       panels: $panels,
     }) {
       order {
-        id
+        itemId
         companyName
         companySiren
         orderAddress
@@ -26,7 +26,7 @@ const mutation = gql`
         panels
       }
       customers {
-        id
+        itemId
         name
         email
         phone
@@ -41,9 +41,9 @@ export default function({
   apollo,
   companyName,
   companySiren,
-  customers,
   orderAddress,
   orderDate,
+  customers,
   panels,
 }) {
   return apollo.mutate({
@@ -51,9 +51,9 @@ export default function({
     variables: {
       companyName,
       companySiren,
-      customers,
       orderAddress,
       orderDate,
+      customers,
       panels
     }
   });
