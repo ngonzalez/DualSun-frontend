@@ -1,8 +1,9 @@
 <template>
   <v-card color="#212121" outlined>
     <v-container fluid>
-      <h5 class="subtitle">{{ $t('orders.panels.panelTitle') }}</h5>
-      {{ this.form }}
+      <h5 class="subtitle">
+        {{ $t('orders.panels.panelTitle') }}
+      </h5>
       <v-row>
         <v-col cols="12">
           <div class="form-group">
