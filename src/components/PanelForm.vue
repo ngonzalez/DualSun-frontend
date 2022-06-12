@@ -1,7 +1,8 @@
 <template>
-  #{{ this.id }}
   <v-card color="#212121" outlined>
     <v-container fluid>
+      <h5 class="subtitle">{{ $t('orders.panels.panelTitle') }}</h5>
+      {{ this.form }}
       <v-row>
         <v-col cols="12">
           <div class="form-group">
@@ -9,9 +10,9 @@
               v-bind:label="$t('orders.panels.panelType')"
               v-bind:items="selectOptions"
               v-bind:input="panelTypeChanged(this.form)"
+              v-model="form.panelType"
               item-text="name"
               item-value="value"
-              v-model="this.form[this.id]"
               class="pa-1 ma-1"
               color="white darken-2"
               outlined
@@ -62,19 +63,37 @@
     props: {
       id: String,
     },
-    emits: ['panelFormClear'],
+    emits: ['panelFormClear', 'panelFormUpdate'],
+    created() {
+      const formId = this.id;
+      this.form = _.find(this.storeData.panels, function(item) {
+        if (formId == item.id) {
+          return item;
+        }
+      });
+    },
     methods: {
       ...mapMutations(['setStoreData']),
       removePanel(event) {
-        this.$emit('panelFormClear', { id: this.id });
+        const formId = this.id;
+        this.$emit('panelFormClear', {
+          id: formId,
+        });
       },
       panelTypeChanged(event) {
-        console.log('panelTypeChanged')
-        console.log(event);
+        if (typeof event == 'undefined') return;
+        const formId = this.id;
+        this.$emit('panelFormUpdate', {
+          id: formId,
+          panelType: event.panelType,
+        });
       },
       panelIdChanged(event) {
-        console.log('panelIdChanged')
-        console.log(event);
+        const formId = this.id;
+        this.$emit('panelFormUpdate', {
+          id: formId,
+          panelId: event.target.value,
+        });
       },
     },
   };

@@ -1,7 +1,8 @@
 <template>
-  #{{ this.id }}
   <v-card color="#212121" outlined>
     <v-container fluid>
+      <h5 class="subtitle">{{ $t('orders.customers.customerTitle') }}</h5>
+      {{ this.form }}
       <v-row>
         <v-col cols="12">
           <div class="form-group">
@@ -66,30 +67,48 @@
     name: 'CustomerForm',
     data: () => ({
       form: {},
-      selectOptions: [],
     }),
     props: {
       id: String,
     },
-    emits: ['customerFormClear'],
+    emits: ['customerFormClear', 'customerFormUpdate'],
+    created() {
+      const formId = this.id;
+      this.form = _.find(this.storeData.customers, function(item) {
+        if (formId == item.id) {
+          return item;
+        }
+      });
+    },
     methods: {
       ...mapMutations(['setStoreData']),
       removeCustomer(event) {
-        this.$emit('customerFormClear', { id: this.id });
+        const formId = this.id;
+        this.$emit('customerFormClear', {
+          id: formId,
+        });
       },
       nameChanged(event) {
-        console.log('nameChanged')
-        console.log(event);
+        const formId = this.id;
+        this.$emit('customerFormUpdate', {
+          id: formId,
+          name: event.target.value,
+        });
       },
       emailChanged(event) {
-        console.log('nameChanged')
-        console.log(event);
+        const formId = this.id;
+        this.$emit('customerFormUpdate', {
+          id: formId,
+          email: event.target.value,
+        });
       },
       phoneChanged(event) {
-        console.log('phoneChanged')
-        console.log(event);
+        const formId = this.id;
+        this.$emit('customerFormUpdate', {
+          id: formId,
+          phone: event.target.value,
+        });
       },
     },
   };
 </script>
-  

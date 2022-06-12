@@ -61,7 +61,8 @@
               <CustomerForm
                 v-for="item in this.form.customers"
                 :id="item.id"
-                @customerFormClear="clearCustomerFormClicked">
+                @customerFormClear="clearCustomerFormClicked"
+                @customerFormUpdate="updateCustomerFormClicked">
               </CustomerForm>
               <div class="pa-5 ma-5">
                 <v-btn
@@ -77,7 +78,8 @@
               <PanelForm
                 v-for="item in this.form.panels"
                 :id="item.id"
-                @panelFormClear="clearPanelFormClicked">
+                @panelFormClear="clearPanelFormClicked"
+                @panelFormUpdate="updatePanelFormClicked">
               </PanelForm>
               <div class="pa-5 ma-5">
                 <v-btn
@@ -109,6 +111,7 @@
   import CustomerForm from '../components/CustomerForm.vue';
   import PanelForm from '../components/PanelForm.vue';
   import createOrder from '../mutations/createOrder';
+  import uniqid from 'uniqid';
   import dayjs from 'dayjs';
   import _ from 'lodash';
 
@@ -120,7 +123,6 @@
     },
     data() {
       return {
-        picker: null,
         breadcrumbs: [],
         form: {
           customers: [],
@@ -149,8 +151,6 @@
 
             // /orders/new
             case 'order_new': {
-              console.log('order_new');
-              console.log(this.storeData);
               this.setFormValues();
               this.loadBreadCrumbs();
               break;
@@ -158,7 +158,7 @@
 
             // /orders/new
             case 'order_new_redirect': {
-              // this.clearFormValues();
+              this.clearFormValues();
               this.loadBreadCrumbs();
               break;
             }
@@ -175,7 +175,7 @@
       },
     },
     methods: {
-      ...mapMutations(['setStoreData']),
+      ...mapMutations(['setStoreData', 'setStoreDataFromKey']),
       loadBreadCrumbs() {
         this.breadcrumbs = [];
         this.breadcrumbs.push({
@@ -204,13 +204,18 @@
       },
       addCustomer() {
         this.form.customers.push({
-          id: _.uniqueId('customer-')
+          id: uniqid(),
         });
+        this.setStoreData({ 'customers': this.form.customers });
       },
       clearCustomerFormClicked(event) {
         _.remove(this.form.customers, function(item) {
           if (item.id == event.id) { return item }
-        })
+        });
+        this.setStoreData({ 'customers': this.form.customers });
+      },
+      updateCustomerFormClicked(event) {
+        this.setStoreData({ 'customers': this.form.customers });
       },
       // panels
       panels() {
@@ -223,13 +228,18 @@
       },
       addPanel() {
         this.form.panels.push({
-          id: _.uniqueId('panel-')
+          id: uniqid(),
         });
+        this.setStoreData({ 'panels': this.form.panels });
       },
       clearPanelFormClicked(event) {
         _.remove(this.form.panels, function(item) {
           if (item.id == event.id) { return item }
-        })
+        });
+        this.setStoreData({ 'panels': this.form.panels });
+      },
+      updatePanelFormClicked(event) {
+        this.setStoreData({ 'panels': this.form.panels });
       },
       clearFormValues() {
         this.setStoreData({ 'companyName': null });
@@ -240,10 +250,6 @@
         this.form.orderAddress = null;
         this.setStoreData({ 'orderDate': null });
         this.form.orderDate = null;
-        this.setStoreData({ 'customers': null });
-        this.form.customers = null;
-        this.setStoreData({ 'panels': null });
-        this.form.panels = null;
       },
       setFormValues() {
         if (this.storeData.companyName) {
@@ -287,6 +293,7 @@
       },
       handleClickSubmit() {
         console.log('handleClickSubmit');
+        console.log(this.form);
       },
       createOrder() {
         const payload = {

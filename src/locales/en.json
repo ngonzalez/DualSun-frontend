@@ -13,11 +13,13 @@
       "customersTitle": "Customers",
       "panelsTitle": "Panels",
       "customers": {
+        "customerTitle": "Customer",
         "name": "Name",
         "email": "Email",
         "phone": "Telephone"
       },
       "panels": {
+        "panelTitle": "Panel",
         "panelType": "Panel Type",
         "panelId": "Panel Id",
         "photovoltaic": {
