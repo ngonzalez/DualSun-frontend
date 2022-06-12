@@ -23,7 +23,8 @@
       "actions": {
         "submit": "Create Order",
         "addCustomer": "Add Customer",
-        "removeCustomer": "Remove Customer"
+        "removeCustomer": "Remove Customer",
+        "selectTime": "Select Time"
       },
       "success": {
         "create": "Order created successfully"

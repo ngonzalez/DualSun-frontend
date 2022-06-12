@@ -50,13 +50,9 @@
             </div>
             <div class="form-group">
               <a-date-picker
-                v-bind:label="$t('orders.orderDate')"
-                class="pa-1 ma-1"
-                color="white darken-2"
-                outlined
-                variant="outlined"
-                @change="this.orderDateChanged($event)"
-                v-model="form.orderDate" />
+                show-time
+                placeholder="Select time"
+                @change="this.orderDateChanged($event)" />
             </div>
             <div class="form-group">
               <h5>{{ $t('orders.customersTitle') }}</h5>
@@ -95,6 +91,7 @@
   import { mapMutations } from 'vuex';
   import CustomerForm from '../components/CustomerForm.vue';
   import createOrder from '../mutations/createOrder';
+  import dayjs from 'dayjs';
   import _ from 'lodash';
 
   export default {
@@ -213,10 +210,9 @@
         });
       },
       orderDateChanged(event) {
-        console.log(event);
-        // this.setStoreData({
-        //   'orderDate': event.target.value,
-        // });
+        this.setStoreData({
+          'orderDate': dayjs(event.$d).format('DD/MM/YYYY HH:mm'),
+        });
       },
       handleClickSubmit() {
         console.log('handleClickSubmit');
