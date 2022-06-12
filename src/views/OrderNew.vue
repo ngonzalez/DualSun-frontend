@@ -150,16 +150,16 @@
     },
     created() {
       if (!this.hasCustomers()) {
-        this.addCustomer();
         if (!this.storeData.customers) {
           this.setStoreData({ 'customers': [] });
         }
+        this.addCustomer();
       }
       if (!this.hasPanels()) {
-        this.addPanel();
         if (!this.storeData.panels) {
           this.setStoreData({ 'panels': [] });
         }
+        this.addPanel();
       }
     },
     watch: {
