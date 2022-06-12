@@ -37,13 +37,13 @@
         </v-col>
       </v-row>
     </v-container>
+    <div class="pa-5 ma-5">
+      <v-btn
+        @click.prevent="removePanel">
+        {{ $t('orders.actions.removePanel') }}
+      </v-btn>
+    </div>
   </v-card>
-  <div class="pa-5 ma-5">
-    <v-btn
-      @click.prevent="removePanel">
-      {{ $t('orders.actions.removePanel') }}
-    </v-btn>
-  </div>
   <hr />
 </template>
 
