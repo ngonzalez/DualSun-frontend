@@ -53,6 +53,7 @@
                 show-time
                 placeholder="Select time"
                 @change="this.orderDateChanged($event)" />
+              <h5 class="subtitle ma-5 pa-5">{{ this.getOrderDate() }}</h5>
             </div>
             <div class="form-group">
               <h5>{{ $t('orders.customersTitle') }}</h5>
@@ -119,7 +120,7 @@
     },
     data() {
       return {
-        picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+        picker: null,
         breadcrumbs: [],
         form: {
           customers: [],
@@ -128,9 +129,18 @@
       };
     },
     created() {
-      console.log(this.storeData);
-      if (!this.hasCustomers()) this.addCustomer();
-      if (!this.hasPanels()) this.addPanel();
+      if (!this.hasCustomers()) {
+        this.addCustomer();
+        if (!this.storeData.customers) {
+          this.setStoreData({ 'customers': [] });
+        }
+      }
+      if (!this.hasPanels()) {
+        this.addPanel();
+        if (!this.storeData.panels) {
+          this.setStoreData({ 'panels': [] });
+        }
+      }
     },
     watch: {
       '$route.name': {
@@ -139,7 +149,9 @@
 
             // /orders/new
             case 'order_new': {
-              // this.setFormValues();
+              console.log('order_new');
+              console.log(this.storeData);
+              this.setFormValues();
               this.loadBreadCrumbs();
               break;
             }
@@ -164,24 +176,6 @@
     },
     methods: {
       ...mapMutations(['setStoreData']),
-      // customers
-      customers() {
-        if (!this.storeData.customers) return;
-        return this.storeData.customers;
-      },
-      hasCustomers() {
-        return this.storeData.customers &&
-               this.storeData.customers.length > 0
-      },
-      // panels
-      panels() {
-        if (!this.storeData.panels) return;
-        return this.storeData.panels;
-      },
-      hasPanels() {
-        return this.storeData.panels &&
-               this.storeData.panels.length > 0
-      },
       loadBreadCrumbs() {
         this.breadcrumbs = [];
         this.breadcrumbs.push({
@@ -192,6 +186,22 @@
           },
         });
       },
+      getOrderDate() {
+        if (this.storeData.orderDate) {
+          return dayjs(this.storeData.orderDate).format('dddd, MMMM D, YYYY h:mm A');
+        } else {
+          return dayjs(new Date()).format('dddd, MMMM D, YYYY 12:00 A');
+        }
+      },
+      // customers
+      customers() {
+        if (!this.storeData.customers) return;
+        return this.storeData.customers;
+      },
+      hasCustomers() {
+        return this.storeData.customers &&
+               this.storeData.customers.length > 0
+      },
       addCustomer() {
         this.form.customers.push({
           id: _.uniqueId('customer-')
@@ -201,6 +211,15 @@
         _.remove(this.form.customers, function(item) {
           if (item.id == event.id) { return item }
         })
+      },
+      // panels
+      panels() {
+        if (!this.storeData.panels) return;
+        return this.storeData.panels;
+      },
+      hasPanels() {
+        return this.storeData.panels &&
+               this.storeData.panels.length > 0
       },
       addPanel() {
         this.form.panels.push({
@@ -263,7 +282,7 @@
       },
       orderDateChanged(event) {
         this.setStoreData({
-          'orderDate': dayjs(event.$d).format('DD/MM/YYYY HH:mm'),
+          'orderDate': dayjs(event.$d).toISOString(),
         });
       },
       handleClickSubmit() {

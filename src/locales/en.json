@@ -19,7 +19,15 @@
       },
       "panels": {
         "panelType": "Panel Type",
-        "panelId": "Panel Id"
+        "panelId": "Panel Id",
+        "photovoltaic": {
+          "title": "Photovoltaic",
+          "value": "photovoltaic"
+        },
+        "hybrid": {
+          "title": "Hybrid",
+          "value": "hybrid"
+        }
       },
       "actions": {
         "submit": "Create Order",
