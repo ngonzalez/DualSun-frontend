@@ -13,8 +13,69 @@
       <v-row>
         <v-col cols="3"></v-col>
         <v-col cols="6">
-          <hr class="invisible" />
-          {{ this.storeData.getOrderBackend }}
+          <h5 class="subtitle">{{ $t('orders.orderTitle') }} #{{ this.storeData.getOrderBackend.order.itemId }}</h5>
+          <v-container fluid style="text-align:left;">
+            <hr />
+            <v-row>
+              <v-col cols="6">
+                {{ $t('orders.companyName') }}
+              </v-col>
+              <v-col cols="6">
+                {{ this.storeData.getOrderBackend.order.companyName }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                {{ $t('orders.companySiren') }}
+              </v-col>
+              <v-col cols="6">
+                {{ this.storeData.getOrderBackend.order.companySiren }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                {{ $t('orders.orderAddress') }}
+              </v-col>
+              <v-col cols="6">
+                {{ this.storeData.getOrderBackend.order.orderAddress }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                {{ $t('orders.orderDate') }}
+              </v-col>
+              <v-col cols="6">
+                {{ this.storeData.getOrderBackend.order.orderDate }}
+              </v-col>
+            </v-row>
+            <hr />
+            <v-card v-for="customer in this.storeData.getOrderBackend.customers">
+              <v-row>
+                <v-col cols="6">
+                  {{ $t('orders.customers.name') }}
+                </v-col>
+                <v-col cols="6">
+                  {{ customer.name }}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  {{ $t('orders.customers.email') }}
+                </v-col>
+                <v-col cols="6">
+                  {{ customer.email }}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  {{ $t('orders.customers.phone') }}
+                </v-col>
+                <v-col cols="6">
+                  {{ customer.phone }}
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-container>
         </v-col>
         <v-col cols="3"></v-col>
       </v-row>
@@ -68,7 +129,8 @@
           disabled: false,
           text: this.$t('orders.orderTitle'),
           to: {
-            name: 'order_new_redirect'
+            name: 'order_show',
+            id: this.$route.params.id,
           },
         });
       },

@@ -355,7 +355,6 @@
                 'createOrderBackend': response,
               });
               this.$toast.info(this.$t('orders.success.create'));
-              console.log(this.storeData.createOrderBackend);
               this.$router.push({
                 name: 'order_show',
                 params: {
