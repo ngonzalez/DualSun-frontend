@@ -1,0 +1,36 @@
+{
+  "en": {
+    "navbar": {
+      "home": "Home"
+    },
+    "orders": {
+      "ordersTitle": "Orders",
+      "newOrderTitle": "New Order",
+      "companyName": "Company Name",
+      "companySiren": "Company SIREN",
+      "orderAddress": "Order Address",
+      "orderDate": "Order Date",
+      "customersTitle": "Customers",
+      "customers": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Telephone"
+      },
+      "panels": {
+        "type": "Type",
+        "ID": "ID"
+      },
+      "actions": {
+        "submit": "Create Order",
+        "addCustomer": "Add Customer",
+        "removeCustomer": "Remove Customer"
+      },
+      "success": {
+        "create": "Order created successfully"
+      },
+      "error": {
+        "create": "Failed to create order"
+      }
+    }
+  }
+}
