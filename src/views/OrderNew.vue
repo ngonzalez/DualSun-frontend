@@ -17,7 +17,7 @@
             <li>
               <v-alert
                 type="error"
-              >
+                icon="false">
                 {{ error }}
               </v-alert>
             </li>
@@ -259,10 +259,10 @@
         this.form.orderAddress = null;
         this.setStoreData({ 'orderDate': null });
         this.form.orderDate = null;
-        this.setStoreData({ 'customers': null });
-        this.form.customers = null;
-        this.setStoreData({ 'panels': null });
-        this.form.panels = null;
+        this.setStoreData({ 'customers': [] });
+        this.form.customers = [];
+        this.setStoreData({ 'panels': [] });
+        this.form.panels = [];
       },
       setFormValues() {
         if (this.storeData.companyName) {
@@ -340,10 +340,10 @@
       },
       createOrder() {
         const payload = {
-          companyName:  this.form.companyName,
-          companySiren: this.form.companySiren,
-          orderAddress: this.form.orderAddress,
-          orderDate: this.getOrderDateIso(),
+          companyName:  this.form.companyName || '',
+          companySiren: this.form.companySiren || '',
+          orderAddress: this.form.orderAddress || '',
+          orderDate: this.getOrderDateIso() || '',
           customers: JSON.stringify(this.getCustomers()),
           panels: JSON.stringify(this.getPanels()),
         };
@@ -363,8 +363,11 @@
               });
             } else {
               this.$toast.warning(this.$t('orders.error.create'));
-              this.errors = JSON.parse(response.errors);
+              this.errors = response.errors
             }
+          })
+          .catch((error) => {
+            this.$toast.warning(this.$t('orders.error.create'));
           });
       },
     },
