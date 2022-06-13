@@ -14,7 +14,7 @@
         <v-col cols="3"></v-col>
         <v-col cols="6">
           <h5 class="subtitle">{{ $t('orders.orderTitle') }} #{{ this.storeData.getOrderBackend.order.itemId }}</h5>
-          <v-container fluid style="text-align:left;">
+          <v-container fluid class="align-left">
             <hr />
             <v-row>
               <v-col cols="6">
@@ -46,6 +46,23 @@
               </v-col>
               <v-col cols="6">
                 {{ this.storeData.getOrderBackend.order.orderDate }}
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                {{ $t('orders.panelsTitle') }}
+              </v-col>
+              <v-col cols="6">
+                <v-table v-for="item in this.displayPanels()" class="pa-5">
+                  <v-row>
+                    <v-col>{{ $t('orders.panels.panelId') }}</v-col>
+                    <v-col>{{ item.panelId }}</v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>{{ $t('orders.panels.panelType') }}</v-col>
+                    <v-col>{{ item.panelType }}</v-col>
+                  </v-row>
+                </v-table>
               </v-col>
             </v-row>
             <hr />
@@ -146,7 +163,10 @@
               this.$toast.warning(this.$t('orders.error.show'));
             }
           });
-      }
+      },
+      displayPanels() {
+        return JSON.parse(this.storeData.getOrderBackend.order.panels);
+      },
     },
   };
 </script>

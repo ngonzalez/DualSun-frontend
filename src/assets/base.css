@@ -20,6 +20,10 @@ body {
   color: #fff;
 }
 
+.align-left {
+  text-align: left;
+}
+
 /* Application background */
 .v-application {
   background:
