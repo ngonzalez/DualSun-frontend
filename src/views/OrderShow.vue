@@ -12,7 +12,7 @@
       </v-row>
       <v-row>
         <v-col cols="3"></v-col>
-        <v-col cols="6">
+        <v-col cols="6" v-if="this.storeData.getOrderBackend.order">
           <h5 class="subtitle">{{ $t('orders.orderTitle') }} #{{ this.storeData.getOrderBackend.order.itemId }}</h5>
           <v-container fluid class="align-left">
             <hr />
